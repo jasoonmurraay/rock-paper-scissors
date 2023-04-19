@@ -1,0 +1,10 @@
+.scissorsButton {
+    background-color: white;
+    border-radius: 50%;
+    border-width: 1rem;
+    border: 1rem solid orange;
+}
+
+.scissorsIcon {
+    padding: 1rem;
+}
