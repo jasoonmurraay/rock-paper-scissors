@@ -1,13 +1,10 @@
 .rockButton {
-    background-color: white;
-    border-radius: 50%;
-    border-width: 1rem;
-}
-
-.rockButton {
-    border: 1rem solid red;
+  background-color: white;
+  border-radius: 50%;
+  border-width: 1rem;
+  border: 1rem solid red;
 }
 
 .rockIcon {
-    padding: 1rem;
+  padding: 1rem;
 }

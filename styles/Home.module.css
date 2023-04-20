@@ -1,142 +1,237 @@
 .body {
-    background: linear-gradient(#1e3756, #171f40);
-    color: white;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  background: linear-gradient(#1e3756, #171f40);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    border: 5px solid #5d6e89;
-    border-radius: 10px;
-    padding: 0.5rem 1rem;
-    width: 80%;
-    max-width: 500px;
+  display: flex;
+  justify-content: space-between;
+  border: 5px solid #5d6e89;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  width: 80%;
+  max-width: 500px;
 }
 
 .title {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-
 .titleIcon {
-    max-height: 70%;
-    max-width: 70%;
+  max-height: 70%;
+  max-width: 70%;
 }
 
 .scoreboard {
-    background-color: white;
-    border-radius: 10px;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .scoreboardContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
 }
 
-.scoreHeader, .scores {
-    color: navy;
+.scoreHeader,
+.scores {
+  color: navy;
 }
-
 
 .buttonSection {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 3rem;
-    margin-bottom: 5rem;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3rem;
+  margin-bottom: 5rem;
 }
 
 .buttonSub1 {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .moveButton {
-    background-color: transparent;
-    border: none;
-    border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
 }
 
 .moveButton:hover {
-    cursor: pointer;
-    transform: translateY(-5px);
+  cursor: pointer;
+  transform: translateY(-5px);
 }
 
 .showMovesSection {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 50%;
-    max-width: 500px;
-    margin: 3rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 3rem 0;
+}
+
+.showPlayerMove,
+.showCpuMove,
+.showResult {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.playerMoveHeader,
+.cpuMoveHeader,
+.resultMessage {
+  max-width: 7rem;
+  text-align: center;
+  font-size: 1.25rem;
 }
 
 .playAgainBtn {
-    background-color: white;
-    border: 1px solid white;
-    color: #171f40;
-    border-radius: 10px;
-    padding: 0.5rem 2rem;
-    height: fit-content;
+  background-color: white;
+  border: 1px solid white;
+  color: #171f40;
+  border-radius: 10px;
+  padding: 0.5rem 2rem;
+  height: fit-content;
 }
 
- .rulesButton:hover, .rulesCloseBtn:hover {
-    cursor: pointer;
-    transform: translateY(-5px);
+.playerIconPlaceholder,
+.cpuIconPlaceholder {
+  margin: 3rem;
+}
+
+.winnerIcon {
+  position: relative;
+}
+
+.winnerIcon:after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  opacity: 0;
+  animation-name: ripple;
+  animation-duration: 2s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(3);
+    opacity: 0.5;
+  }
+}
+
+.rulesButton:hover,
+.rulesCloseBtn:hover,
+.playAgainBtn:hover {
+  cursor: pointer;
+  transform: translateY(-5px);
 }
 
 .rulesButton {
-    background-color: transparent;
-    padding: 0.5rem 1rem;
-    border: 3px solid #5d6e89;
-    color: white;
-    border-radius: 10px;
-    padding: 1rem 2rem;
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  border: 3px solid #5d6e89;
+  color: white;
+  border-radius: 10px;
+  padding: 1rem 2rem;
 }
 
 .rulesButton:hover {
-    background-color: white;
-    color: navy;
-    border: 3px solid white;
-    transform: translateY(-5px);
-    box-shadow: 0 5px 5px white;
+  background-color: white;
+  color: navy;
+  border: 3px solid white;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 5px white;
 }
 
 .rulesDisplay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
-    color: #1e3756;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  color: #1e3756;
 }
 
 .rulesHeader {
-    margin-top: 5rem;
+  margin-top: 5rem;
 }
 
 .rulesBody {
-    margin-top: 10rem;
+  margin-top: 10rem;
 }
 
 .rulesCloseBtn {
-    margin-top: 5rem;
-    background-color: transparent;
-    border: none;
+  margin-top: 5rem;
+  background-color: transparent;
+  border: none;
+}
+
+.showResult {
+  margin: 0 2rem;
+}
+
+@media (max-width: 810px) {
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .titleIcon {
+    margin-left: 20%;
+  }
+  .scoreboard {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 500px) {
+  .showMovesSection {
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0;
+  }
+
+  .showResult {
+    margin-bottom: 3rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .showMovesSection {
+    width: 100%;
+  }
 }

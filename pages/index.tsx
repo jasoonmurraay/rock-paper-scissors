@@ -1,6 +1,6 @@
 import Head from "next/head";
 import classes from "../styles/Home.module.css";
-import { useState, MouseEvent, useCallback, useEffect } from "react";
+import { useState, MouseEvent, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import RockIcon from "@/components/RockIcon";
 import PaperIcon from "@/components/PaperIcon";
@@ -14,8 +14,45 @@ export default function Home() {
   const [comMoves, setComMoves] = useState<string[]>([]);
   const [showingMoves, setShowingMoves] = useState<boolean>(false);
   const [playerResult, setPlayerResult] = useState<string[]>([]);
+  const [playerIconVisible, setPlayerIconVisible] = useState<boolean>(false);
+  const [cpuIconVisible, setCPUIconVisible] = useState<boolean>(false);
+  const [resultVisible, setResultVisible] = useState<boolean>(false);
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 0,
+    height: typeof window !== "undefined" ? window.innerHeight : 0,
+  });
 
   const computerMoveDict = ["rock", "paper", "scissors"];
+
+  const handleResize = useCallback(() => {
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
+
+  useEffect(() => {
+    if (showingMoves) {
+      setTimeout(() => {
+        setPlayerIconVisible(true);
+        setTimeout(() => {
+          setCPUIconVisible(true);
+          setTimeout(() => {
+            setResultVisible(true);
+            if (playerResult[playerResult.length - 1] === "win") {
+              setPlayerScore((prevScore) => prevScore + 1);
+            } else if (playerResult[playerResult.length - 1] === "lose") {
+              setCpuScore((prevScore) => prevScore + 1);
+            }
+          }, 1000);
+        }, 1000);
+      }, 1000);
+    }
+  }, [showingMoves]);
 
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     if (event.target instanceof HTMLImageElement) {
@@ -48,12 +85,10 @@ export default function Home() {
       let result;
       switch (computerMove) {
         case "paper":
-          setCpuScore((prevScore) => prevScore + 1);
           result = [...playerResult, "lose"];
           setPlayerResult(result);
           break;
         case "scissors":
-          setPlayerScore((prevScore) => prevScore + 1);
           result = [...playerResult, "win"];
           setPlayerResult(result);
           break;
@@ -62,12 +97,10 @@ export default function Home() {
       let result;
       switch (computerMove) {
         case "rock":
-          setPlayerScore((prevScore) => prevScore + 1);
           result = [...playerResult, "win"];
           setPlayerResult(result);
           break;
         case "scissors":
-          setCpuScore((prevScore) => prevScore + 1);
           result = [...playerResult, "lose"];
           setPlayerResult(result);
           break;
@@ -76,18 +109,37 @@ export default function Home() {
       let result;
       switch (computerMove) {
         case "paper":
-          setPlayerScore((prevScore) => prevScore + 1);
           result = [...playerResult, "win"];
           setPlayerResult(result);
           break;
         case "rock":
-          setCpuScore((prevScore) => prevScore + 1);
           result = [...playerResult, "lose"];
           setPlayerResult(result);
           break;
       }
     }
   };
+
+  const resultDiv = playerResult.length && (
+    <div className={classes.showResult}>
+      <p aria-label="Game result" className={classes.resultMessage}>
+        {`You ${playerResult[playerResult.length - 1].toUpperCase()}`}
+      </p>
+      <button
+        aria-label="Play again!"
+        tabIndex={0}
+        onClick={() => {
+          setShowingMoves(false),
+            setPlayerIconVisible(false),
+            setCPUIconVisible(false);
+          setResultVisible(false);
+        }}
+        className={classes.playAgainBtn}
+      >
+        Play Again
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -98,19 +150,22 @@ export default function Home() {
           content="Play Rock, Paper, Scissors against the computer!"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="" />
+        <link rel="icon" href="/logo.svg" />
       </Head>
-      <main className={classes.body}>
+      <main aria-label="Content" className={classes.body}>
         {!showRules && (
           <>
-            <section className={classes.header}>
+            <section
+              aria-label="Logo and Scoreboard"
+              className={classes.header}
+            >
               <div className={classes.title}>
                 <Image
                   width={200}
                   height={100}
                   className={classes.titleIcon}
                   src="/logo.svg"
-                  alt=""
+                  alt="Rock, Paper, Scissors Logo"
                 />
               </div>
               <div className={classes.scoreboard}>
@@ -156,39 +211,62 @@ export default function Home() {
             )}
             {showingMoves && (
               <section className={classes.showMovesSection}>
-                <div>
-                  <p>YOU PICKED</p>
-                  {userMoves[userMoves.length - 1] === "rock" ? (
-                    <RockIcon onClick={() => {}} />
-                  ) : userMoves[userMoves.length - 1] === "paper" ? (
-                    <PaperIcon onClick={() => {}} />
-                  ) : (
-                    <ScissorsIcon onClick={() => {}} />
+                <div className={classes.showPlayerMove}>
+                  <p className={classes.playerMoveHeader}>YOU PICKED</p>
+                  {!playerIconVisible && (
+                    <div className={classes.playerIconPlaceholder}></div>
+                  )}
+                  {playerIconVisible && (
+                    <div
+                      className={`
+                        ${
+                          playerResult[playerResult.length - 1] === "win" &&
+                          resultVisible
+                            ? classes.winnerIcon
+                            : ""
+                        } ${classes.moveIcon}
+                      `}
+                    >
+                      {userMoves[userMoves.length - 1] === "rock" ? (
+                        <RockIcon onClick={() => {}} />
+                      ) : userMoves[userMoves.length - 1] === "paper" ? (
+                        <PaperIcon onClick={() => {}} />
+                      ) : (
+                        <ScissorsIcon onClick={() => {}} />
+                      )}
+                    </div>
                   )}
                 </div>
-                <div>
-                  <p className={classes.resultMessage}>{`You ${playerResult[
-                    playerResult.length - 1
-                  ].toUpperCase()}`}</p>
-                  <button
-                    onClick={() => setShowingMoves(false)}
-                    className={classes.playAgainBtn}
-                  >
-                    Play Again
-                  </button>
-                </div>
-                <div>
-                  <p>THE HOUSE PICKED</p>
-                  {comMoves[comMoves.length - 1] === "rock" ? (
-                    <RockIcon onClick={() => {}} />
-                  ) : comMoves[comMoves.length - 1] === "paper" ? (
-                    <PaperIcon onClick={() => {}} />
-                  ) : (
-                    <ScissorsIcon onClick={() => {}} />
+                {resultVisible && (windowSize.width > 500 ? resultDiv : <></>)}
+                <div className={classes.showCpuMove}>
+                  <p className={classes.cpuMoveHeader}>THE HOUSE PICKED</p>
+                  {!cpuIconVisible && (
+                    <div className={classes.cpuIconPlaceholder}></div>
+                  )}
+                  {cpuIconVisible && (
+                    <div
+                      className={`
+                      ${
+                        playerResult[playerResult.length - 1] === "lose" &&
+                        resultVisible
+                          ? classes.winnerIcon
+                          : ""
+                      } ${classes.moveIcon}
+                    `}
+                    >
+                      {comMoves[comMoves.length - 1] === "rock" ? (
+                        <RockIcon onClick={() => {}} />
+                      ) : comMoves[comMoves.length - 1] === "paper" ? (
+                        <PaperIcon onClick={() => {}} />
+                      ) : (
+                        <ScissorsIcon onClick={() => {}} />
+                      )}
+                    </div>
                   )}
                 </div>
               </section>
             )}
+            {resultVisible && (windowSize.width <= 500 ? resultDiv : <></>)}
             <button
               onClick={() => setShowRules(true)}
               className={classes.rulesButton}
